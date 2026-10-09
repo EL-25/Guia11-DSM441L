@@ -32,11 +32,19 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         val fab_agregar: FloatingActionButton = findViewById<FloatingActionButton>(R.id.fab_agregar)
+        val btnIrAProfesores: View? = findViewById(R.id.btnIrAProfesores)
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         // Obtiene la instancia de Retrofit con el cliente OkHttpClient
         api = RetrofitClient.instance
         cargarDatos(api)
+
+        // Navegación a la pantalla de gestión de profesores
+        btnIrAProfesores?.setOnClickListener {
+            val intent = Intent(this, ProfesorActivity::class.java)
+            startActivity(intent)
+        }
+
         // Cuando el usuario quiere agregar un nuevo registro
         fab_agregar.setOnClickListener(View.OnClickListener {
             val i = Intent(getBaseContext(), CrearAlumnoActivity::class.java)

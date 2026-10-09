@@ -58,13 +58,39 @@ class ActualizarAlumnoActivity : AppCompatActivity() {
         val alumno = Alumno(0,nombre, apellido, edad)
         // Configurar el botón de actualización
         actualizarButton.setOnClickListener {
+            val nombreActualizado = nombreEditText.text.toString().trim()
+            val apellidoActualizado = apellidoEditText.text.toString().trim()
+            val edadStr = edadEditText.text.toString().trim()
+
+            if (nombreActualizado.isEmpty()) {
+                nombreEditText.error = "Ingresa el nombre"
+                nombreEditText.requestFocus()
+                return@setOnClickListener
+            }
+            if (apellidoActualizado.isEmpty()) {
+                apellidoEditText.error = "Ingresa el apellido"
+                apellidoEditText.requestFocus()
+                return@setOnClickListener
+            }
+            if (edadStr.isEmpty()) {
+                edadEditText.error = "Ingresa la edad"
+                edadEditText.requestFocus()
+                return@setOnClickListener
+            }
+            val edadActualizada = edadStr.toIntOrNull()
+            if (edadActualizada == null || edadActualizada <= 0) {
+                edadEditText.error = "Ingresa una edad válida"
+                edadEditText.requestFocus()
+                return@setOnClickListener
+            }
+
             if (alumno != null) {
                 // Crear un nuevo objeto Alumno con los datos actualizados
                 val alumnoActualizado = Alumno(
                     alumnoId,
-                    nombreEditText.text.toString(),
-                    apellidoEditText.text.toString(),
-                    edadEditText.text.toString().toInt()
+                    nombreActualizado,
+                    apellidoActualizado,
+                    edadActualizada
                 )
                 //Log.e("API", "alumnoActualizado : $alumnoActualizado")
                 val jsonAlumnoActualizado = Gson().toJson(alumnoActualizado)

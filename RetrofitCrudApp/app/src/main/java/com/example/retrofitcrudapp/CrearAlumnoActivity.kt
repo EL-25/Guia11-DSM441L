@@ -34,10 +34,33 @@ class CrearAlumnoActivity : AppCompatActivity() {
         edadEditText = findViewById(R.id.editTextEdad)
         crearButton = findViewById(R.id.btnGuardar)
         crearButton.setOnClickListener {
-            val nombre = nombreEditText.text.toString()
-            val apellido = apellidoEditText.text.toString()
-            val edad = edadEditText.text.toString().toInt()
-            val alumno = Alumno(0,nombre, apellido, edad)
+            val nombre = nombreEditText.text.toString().trim()
+            val apellido = apellidoEditText.text.toString().trim()
+            val edadStr = edadEditText.text.toString().trim()
+
+            if (nombre.isEmpty()) {
+                nombreEditText.error = "Ingresa el nombre"
+                nombreEditText.requestFocus()
+                return@setOnClickListener
+            }
+            if (apellido.isEmpty()) {
+                apellidoEditText.error = "Ingresa el apellido"
+                apellidoEditText.requestFocus()
+                return@setOnClickListener
+            }
+            if (edadStr.isEmpty()) {
+                edadEditText.error = "Ingresa la edad"
+                edadEditText.requestFocus()
+                return@setOnClickListener
+            }
+            val edad = edadStr.toIntOrNull()
+            if (edad == null || edad <= 0) {
+                edadEditText.error = "Ingresa una edad válida"
+                edadEditText.requestFocus()
+                return@setOnClickListener
+            }
+
+            val alumno = Alumno(0, nombre, apellido, edad)
             // Obtiene la instancia de Retrofit con el cliente OkHttpClient
             val api = RetrofitClient.instance
             api.crearAlumno(alumno).enqueue(object : Callback<Alumno> {
